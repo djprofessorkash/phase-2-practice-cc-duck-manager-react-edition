@@ -76,6 +76,18 @@ function App() {
   // and pass that in as a prop to `DuckDisplay` in order to perform a second
   // GET request on the newly updated data!
 
+  function postNewDuck(newDuck) {
+    fetch('http://localhost:4001/ducks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newDuck)
+    })
+    .then(res => res.json())
+    .then(newDuckFromServer => setDucks([...ducks, newDuckFromServer]))
+  }
+
   // GET request on server-hosted duck data
   useEffect(() => {
     fetch('http://localhost:4001/ducks')
@@ -104,7 +116,7 @@ function App() {
       <button onClick={() => handleClickForm()}>{duckFormOpen ? "Close" : "Open" } Duck Form</button>
 
       {/* Conditionally display the duck form on the line below depending on whether the duckFormOpen state is true or false... */}
-      { duckFormOpen ? <DuckForm /> : null }
+      { duckFormOpen ? <DuckForm postNewDuck={postNewDuck}/> : null }
 
     </div>
   );
