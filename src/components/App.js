@@ -34,6 +34,13 @@
   • Define a ternary expression for handling the toggling functionality of form state.
 */
 
+/*
+  DELIVERABLE FOUR: In the duck detail, the number of likes should increment whenever the likes 
+                    button is clicked.
+
+  But wait... do we need to initially handle this deliverable in the scope/context of `App.js`?
+*/
+
 import React, { useState, useEffect } from 'react'
 import DuckList from './DuckList'
 import DuckDisplay from "./DuckDisplay"

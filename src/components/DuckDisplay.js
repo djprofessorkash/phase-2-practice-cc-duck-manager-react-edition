@@ -10,10 +10,38 @@
     `handleClickDuck`, which means we'll have to manually add that logic in each component!
 */
 
-import React from 'react'
+/*
+  DELIVERABLE FOUR: In the duck detail, the number of likes should increment whenever the likes 
+                    button is clicked.
+
+  • Since like incrementation is a feature embedded within the featured duck display, and there's
+    no direct data transfer/flux from the outermost components, we can simply start at the parent
+    component of the likes button!
+  • We want to get access to our featured duck's likes via state getters and setters. 
+  • From there, we can leverage a `useEffect` to invoke the state setter and reset the current
+    likes to the updated likes post-incrementation.
+  • We also need an outer helper function (`handleIncrementLikes`) that actually handles the 
+    direct logic of HOW the incrementation works (e.g. on click, do we add one to the current
+    likes?).
+  • Finally, we can redefine the button class in the returned JSX to execute the increment handling
+    helper function and re-render the button's text with the newly updated current likes.
+*/
+
+
+import React, { useState, useEffect } from 'react'
 
 
 function DuckDisplay(props) {
+
+  const [currentLikes, setCurrentLikes] = useState(props.featuredDuck.likes)
+
+  useEffect(() => {
+    setCurrentLikes(props.featuredDuck.likes)
+  }, [props.featuredDuck])
+
+  const handleIncrementLikes = () => {
+    setCurrentLikes(currentLikes + 1)
+  }
 
   return (
     <div className="duck-display">
@@ -26,7 +54,7 @@ function DuckDisplay(props) {
       {/* Set the currently featured duck image and hoverable name via the prop attributes! */}
       <img src={props.featuredDuck.img_url} alt={props.featuredDuck.name} />
 
-      <button>0 likes</button>
+      <button onClick={() => handleIncrementLikes()} >{currentLikes} likes</button>
 
     </div>
   )
