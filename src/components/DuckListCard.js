@@ -10,9 +10,24 @@
   • That should be the last component we need to build out to complete our deliverable!
 */
 
-function DuckListCard(props) {
+/* 
+  DELIVERABLE TWO: When a DuckListCard is clicked, it becomes the featuredDuck in state. 
+  The featuredDuck details are shown in the DuckDisplay component.
+
+  • Again, let's rename our props for clarity since we're dealing with variant data types.
+  • From here, let's add an `onClick` event handler as part of the image HTML that 
+    calls `handleClickDuck()` and passes it a `duck` object. 
+  • From there, the rendered `duck.img_url` and `duck.name` can be dynamically set using the 
+    setter that we invoke in the context of `handleClickDuck`. 
+*/
+
+function DuckListCard({duck, handleClickDuck}) {
   return (
-    <img src={props.duck.img_url} alt={props.duck.name} />
+    <img 
+      onClick={() => handleClickDuck(duck)}
+      src={duck.img_url} 
+      alt={duck.name} 
+    />
   )
 }
 

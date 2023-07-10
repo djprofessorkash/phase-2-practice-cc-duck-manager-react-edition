@@ -14,12 +14,22 @@
   • Now let's take care of our card! 
 */
 
+/* 
+  DELIVERABLE TWO: When a DuckListCard is clicked, it becomes the featuredDuck in state. 
+  The featuredDuck details are shown in the DuckDisplay component.
+
+  • Since we're handling multiple props of different types (now we have a variable and a
+    function), I've renamed them for clarity. 
+  • `DuckList` itself doesn't really need to handle the logic for clicking on a duck – that's
+    `DuckListCard`'s job. We just have to pass it down as a prop!
+*/
+
 import React from 'react'
 import DuckListCard from "./DuckListCard"
 
-function DuckList(props) {
+function DuckList({ducks, handleClickDuck}) {
 
-  const mappedDucks = props.ducks.map(duck => <DuckListCard key={duck.id} duck={duck} />)
+  const mappedDucks = ducks.map(duck => <DuckListCard key={duck.id} duck={duck} handleClickDuck={handleClickDuck}/>)
 
   return (
 
