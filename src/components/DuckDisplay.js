@@ -27,6 +27,15 @@
     helper function and re-render the button's text with the newly updated current likes.
 */
 
+/*
+  DELIVERABLE FIVE: When the number of likes increments, send a PATCH request to edit the 
+                    duck in the backend.
+
+  • We need to modify the logic of our like-increment handling function to perform a PATCH
+    action immediately upon updating our likes data.
+  • Create a fetch API request using a PATCH action. We have to remember to convert the 
+    updated likes to JSON and pass that to the appropriate endpoint in the database.
+*/
 
 import React, { useState, useEffect } from 'react'
 
@@ -41,6 +50,14 @@ function DuckDisplay(props) {
 
   const handleIncrementLikes = () => {
     setCurrentLikes(currentLikes + 1)
+
+    fetch(`http://localhost:4001/ducks/${props.featuredDuck.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({likes: currentLikes + 1})
+    })
   }
 
   return (

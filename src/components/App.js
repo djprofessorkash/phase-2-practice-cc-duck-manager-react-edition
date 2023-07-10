@@ -41,6 +41,13 @@
   But wait... do we need to initially handle this deliverable in the scope/context of `App.js`?
 */
 
+/*
+  DELIVERABLE FIVE: When the number of likes increments, send a PATCH request to edit the 
+                    duck in the backend.
+
+  Do we need to initially handle this deliverable in the scope/context of `App.js`?
+*/
+
 import React, { useState, useEffect } from 'react'
 import DuckList from './DuckList'
 import DuckDisplay from "./DuckDisplay"
@@ -61,6 +68,13 @@ function App() {
   const handleClickForm = () => {
     setDuckFormOpen(!duckFormOpen)
   }
+
+  // Interesting bug... likes is being updated in the database but not upon
+  // refreshing the image cards. This is because when we switch between image
+  // cards, we lean back on the data from the relevant prop as opposed to the 
+  // object data. In other words, we need to call a "rerendering" function 
+  // and pass that in as a prop to `DuckDisplay` in order to perform a second
+  // GET request on the newly updated data!
 
   // GET request on server-hosted duck data
   useEffect(() => {
