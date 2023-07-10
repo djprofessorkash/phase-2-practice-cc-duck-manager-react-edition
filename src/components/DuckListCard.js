@@ -11,8 +11,8 @@
 */
 
 /* 
-  DELIVERABLE TWO: When a DuckListCard is clicked, it becomes the featuredDuck in state. 
-  The featuredDuck details are shown in the DuckDisplay component.
+  DELIVERABLE TWO:  When a DuckListCard is clicked, it becomes the featuredDuck in state. 
+                    The featuredDuck details are shown in the DuckDisplay component.
 
   • Again, let's rename our props for clarity since we're dealing with variant data types.
   • From here, let's add an `onClick` event handler as part of the image HTML that 

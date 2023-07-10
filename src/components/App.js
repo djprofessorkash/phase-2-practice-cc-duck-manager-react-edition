@@ -24,6 +24,16 @@
   • Now let's go write the logic for `DuckDisplay`!
 */
 
+/*
+  DELIVERABLE THREE:  When the button that says Open Duck Form is clicked, it will toggle 
+                      whether the DuckForm is displayed or not. Use best practices with conditional 
+                      rendering to show it. Additionally, the button should either read Open Duck Form 
+                      or Close Duck Form depending on whether the form is already opened or closed.
+
+  • Modify the "Open Duck Form" button to display currently toggled text from current state.
+  • Define a ternary expression for handling the toggling functionality of form state.
+*/
+
 import React, { useState, useEffect } from 'react'
 import DuckList from './DuckList'
 import DuckDisplay from "./DuckDisplay"
@@ -36,8 +46,13 @@ function App() {
   const [duckFormOpen, setDuckFormOpen] = useState(true)
 
   // Define helper function for handling duck image click
-  function handleClickDuck(duck) {
+  const handleClickDuck = (duck) => {
     setFeaturedDuck(duck)
+  }
+
+  // Define helper function for handling "Open Duck Form" button click
+  const handleClickForm = () => {
+    setDuckFormOpen(!duckFormOpen)
   }
 
   // GET request on server-hosted duck data
@@ -64,10 +79,11 @@ function App() {
       {/* Send our duck on-click handler as a prop of our duck display region! */}
       <DuckDisplay featuredDuck={featuredDuck}/>
 
-      <button>Open Duck Form</button>
+      {/* Extend the button's text and functionality to handle open/close toggling! */}
+      <button onClick={() => handleClickForm()}>{duckFormOpen ? "Close" : "Open" } Duck Form</button>
 
       {/* Conditionally display the duck form on the line below depending on whether the duckFormOpen state is true or false... */}
-      <DuckForm />
+      { duckFormOpen ? <DuckForm /> : null }
 
     </div>
   );
