@@ -40,24 +40,32 @@
 import React, { useState, useEffect } from 'react'
 
 
-function DuckDisplay(props) {
+function DuckDisplay({featuredDuck}) {
 
-  const [currentLikes, setCurrentLikes] = useState(props.featuredDuck.likes)
+  const [currentLikes, setCurrentLikes] = useState(featuredDuck.likes)
 
   useEffect(() => {
-    setCurrentLikes(props.featuredDuck.likes)
-  }, [props.featuredDuck])
+    setCurrentLikes(featuredDuck.likes)
+  }, [featuredDuck])
 
   const handleIncrementLikes = () => {
-    setCurrentLikes(currentLikes + 1)
-
-    fetch(`http://localhost:4001/ducks/${props.featuredDuck.id}`, {
+    fetch(`http://localhost:4001/ducks/${featuredDuck.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({likes: currentLikes + 1})
     })
+      .then(response => response.json())
+      .then(() => {
+        // Resolution for Post-PATCH Card Switch Like Rerendering Bug
+        featuredDuck.likes = currentLikes + 1
+        setCurrentLikes(currentLikes + 1)
+      })
+
+    // console.log(`State Reference Post-PATCH: ${currentLikes}`)
+    // console.log(`Object Reference Post-PATCH: ${featuredDuck.likes}`)
+
   }
 
   return (
@@ -66,10 +74,10 @@ function DuckDisplay(props) {
       {/* show all the details for the featuredDuck state here */}
 
       {/* Set the currently featured duck name via the prop attribute! */}
-      <h2>{props.featuredDuck.name}</h2>
+      <h2>{featuredDuck.name}</h2>
 
       {/* Set the currently featured duck image and hoverable name via the prop attributes! */}
-      <img src={props.featuredDuck.img_url} alt={props.featuredDuck.name} />
+      <img src={featuredDuck.img_url} alt={featuredDuck.name} />
 
       <button onClick={() => handleIncrementLikes()} >{currentLikes} likes</button>
 
