@@ -33,8 +33,9 @@
 
   • We need to modify the logic of our like-increment handling function to perform a PATCH
     action immediately upon updating our likes data.
-  • Create a fetch API request using a PATCH action. We have to remember to convert the 
+  • Create a fetch API invocation using a PATCH request. We have to remember to convert the 
     updated likes to JSON and pass that to the appropriate endpoint in the database.
+  • Uh oh... our PATCH is not really working as expected. 
 */
 
 import React, { useState, useEffect } from 'react'
@@ -42,12 +43,16 @@ import React, { useState, useEffect } from 'react'
 
 function DuckDisplay({featuredDuck}) {
 
+  // State instantiation for getting and setting current duck card's likes
   const [currentLikes, setCurrentLikes] = useState(featuredDuck.likes)
 
+  // Side effect to load currently featured duck's likes on new feature component render
   useEffect(() => {
     setCurrentLikes(featuredDuck.likes)
   }, [featuredDuck])
 
+  // Handler to invoke fetch API for PATCH request, JSONify response,
+  // and increment state getter for current duck card's likes
   const handleIncrementLikes = () => {
     fetch(`http://localhost:4001/ducks/${featuredDuck.id}`, {
       method: 'PATCH',
@@ -60,6 +65,8 @@ function DuckDisplay({featuredDuck}) {
       .then(() => {
         // Resolution for Post-PATCH Card Switch Like Rerendering Bug
         featuredDuck.likes = currentLikes + 1
+
+        // Updates state variable via incrementation
         setCurrentLikes(currentLikes + 1)
       })
 
