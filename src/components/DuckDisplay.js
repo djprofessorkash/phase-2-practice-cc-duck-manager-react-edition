@@ -35,6 +35,19 @@
     action immediately upon updating our likes data.
   • Create a fetch API request using a PATCH action. We have to remember to convert the 
     updated likes to JSON and pass that to the appropriate endpoint in the database.
+  • Once we've JSONified our response, we can invoke our state setter for current likes in 
+    order to increment our duck's likes state by one. 
+  • Uh oh... our PATCH is not really working as expected. As it turns out, we're forgetting
+    to initially set our current likes – we want the current duck's likes to refresh every
+    time we load a new featured duck, so we can use a side effect (`useEffect`) to trigger
+    the setting logic each time a new featured duck is rendered (by setting `[featuredDuck]` 
+    as a dependency).
+  
+  BONUS: 
+  • Wait a minute... our PATCH request is only working partially. It turns out that when we 
+    rerender a new featured duck, our program is updating the state and the database, but 
+    NOT the actual attribute of `featuredDuck`. So we need to explicitly update the currently
+    loaded attribute of `featuredDuck` in the same scope as when we perform our incrementation. 
 */
 
 import React, { useState, useEffect } from 'react'
@@ -42,12 +55,16 @@ import React, { useState, useEffect } from 'react'
 
 function DuckDisplay({featuredDuck}) {
 
+  // State instantiation for getting and setting current duck card's likes
   const [currentLikes, setCurrentLikes] = useState(featuredDuck.likes)
 
+  // Side effect to load currently featured duck's likes on new feature component render
   useEffect(() => {
     setCurrentLikes(featuredDuck.likes)
   }, [featuredDuck])
 
+  // Handler to invoke fetch API for PATCH request, JSONify response,
+  // and increment state getter for current duck card's likes
   const handleIncrementLikes = () => {
     fetch(`http://localhost:4001/ducks/${featuredDuck.id}`, {
       method: 'PATCH',
@@ -60,9 +77,15 @@ function DuckDisplay({featuredDuck}) {
       .then(() => {
         // Resolution for Post-PATCH Card Switch Like Rerendering Bug
         featuredDuck.likes = currentLikes + 1
+
+        // Updates state variable via incrementation
         setCurrentLikes(currentLikes + 1)
       })
-    }
+
+    // console.log(`State Reference Post-PATCH: ${currentLikes}`)
+    // console.log(`Object Reference Post-PATCH: ${featuredDuck.likes}`)
+
+  }
 
   return (
     <div className="duck-display">
