@@ -48,6 +48,29 @@
   Do we need to initially handle this deliverable in the scope/context of `App.js`?
 */
 
+/*
+  DELIVERABLE SIX:  Make the DuckForm a controlled form. When submitted, a new duck 
+                    gets posted to the `db.json` database. Assume that a new duck starts
+                    with zero likes.
+
+  • Since the form will be manipulating data across siblings and parents, we're aware that
+    we'll have to use state and traverse across our document, which means that we can 
+    contextually start from `App.js`.
+  • Before diving into the duck form, we'll handle outer logic by creating a helper function
+    that can perform the POST request to the database. 
+  • This helper function will utilize `fetch()` using POST parameters as well as an ingested 
+    `newDuckObject` data structure that contains the duck data received from the relevant
+    form submission in `DuckForm.js`. This will save it to our database.
+  • After saving the object, we need to rerender our displayed duck list with a new card 
+    representing our new duck object – we can do this by JSONifying our created object and 
+    invoking the state setter for all ducks (`setDucks`). 
+  • Since we're manipulating array-like data using a setter, the spread operator is needed 
+    to unpack the currently rendered `ducks` and append our newly generated duck. 
+  • Once the POST request helper has been created, we can invoke it in our JSX element for 
+    the new duck submission form. 
+  • Now let's handle the logic for the form!
+*/
+
 import React, { useState, useEffect } from 'react'
 import DuckList from './DuckList'
 import DuckDisplay from "./DuckDisplay"
@@ -69,29 +92,22 @@ function App() {
     setDuckFormOpen(!duckFormOpen)
   }
 
-  // Interesting bug... likes is being updated in the database but not upon
-  // refreshing the image cards. This is because when we switch between image
-  // cards, we lean back on the data from the relevant prop as opposed to the 
-  // object data. In other words, we need to call a "rerendering" function 
-  // and pass that in as a prop to `DuckDisplay` in order to perform a second
-  // GET request on the newly updated data!
-
-  function postNewDuck(newDuck) {
+  function postNewDuck(newDuckObject) {
     fetch('http://localhost:4001/ducks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(newDuck)
+      body: JSON.stringify(newDuckObject)
     })
-    .then(res => res.json())
-    .then(newDuckFromServer => setDucks([...ducks, newDuckFromServer]))
+    .then(response => response.json())
+    .then(newDuckToSaveToServer => setDucks([...ducks, newDuckToSaveToServer]))
   }
 
   // GET request on server-hosted duck data
   useEffect(() => {
     fetch('http://localhost:4001/ducks')
-    .then(res => res.json())
+    .then(response => response.json())
     // .then(data => console.log(data))
     .then(data => {
       setDucks(data)
