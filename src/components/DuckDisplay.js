@@ -35,7 +35,19 @@
     action immediately upon updating our likes data.
   • Create a fetch API invocation using a PATCH request. We have to remember to convert the 
     updated likes to JSON and pass that to the appropriate endpoint in the database.
-  • Uh oh... our PATCH is not really working as expected. 
+  • Once we've JSONified our response, we can invoke our state setter for current likes in 
+    order to increment our duck's likes state by one. 
+  • Uh oh... our PATCH is not really working as expected. As it turns out, we're forgetting
+    to initially set our current likes – we want the current duck's likes to refresh every
+    time we load a new featured duck, so we can use a side effect (`useEffect`) to trigger
+    the setting logic each time a new featured duck is rendered (by setting `[featuredDuck]` 
+    as a dependency).
+  
+  BONUS: 
+  • Wait a minute... our PATCH request is only working partially. It turns out that when we 
+    rerender a new featured duck, our program is updating the state and the database, but 
+    NOT the actual attribute of `featuredDuck`. So we need to explicitly update the currently
+    loaded attribute of `featuredDuck` in the same scope as when we perform our incrementation. 
 */
 
 import React, { useState, useEffect } from 'react'
